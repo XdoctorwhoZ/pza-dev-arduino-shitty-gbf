@@ -1,0 +1,51 @@
+{
+    name: "arduino-shitty-gbf",
+
+    producers: {
+        "arduino-shitty-gbf" : {
+            manufacturer: "panduza",
+            interface: {
+                name: "serial-eol",
+                conf: {
+                    eol: "\n"
+                }
+            },
+
+            // classes: {
+
+            // },
+            attributes: {
+                
+                "duty cycle": {
+                    info: "Duty cycle of the PWM",
+                    type: "number",
+                    range: [0, 100],
+                    mode: "rw",
+                    model: "number-accessor",
+                    codec: {
+                        name: "scpi",
+                        conf: {
+                            read_query: "PWM:DUTY?",
+                            write_query: "PWM:DUTY"
+                        }
+                    }
+                },
+                period: {
+                    info: "Period of the PWM in micro-seconds",
+                    type: "number",
+                    mode: "rw",
+                    model: "number-accessor",
+                    codec: {
+                        name: "scpi",
+                        conf: {
+                            read_query: "PWM:PERIOD?",
+                            write_query: "PWM:PERIOD"
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+}
