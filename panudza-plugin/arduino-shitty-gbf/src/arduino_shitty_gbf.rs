@@ -7,6 +7,7 @@ mod specialized_interface;
 pub use specialized_interface::SpecializedInterface;
 pub use specialized_interface::BooleanAccessorIndex;
 pub use specialized_interface::StringAccessorIndex;
+pub use specialized_interface::NumberAccessorIndex;
 
 #[derive(Default)]
 pub struct Package {}

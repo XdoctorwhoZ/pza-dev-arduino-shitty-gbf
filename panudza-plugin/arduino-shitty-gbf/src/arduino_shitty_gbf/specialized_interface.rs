@@ -1,18 +1,18 @@
 // Common
-use async_trait::async_trait;
 use bytes::Bytes;
-use panduza_platform_core::helper;
-use panduza_platform_core::log_info;
-use panduza_platform_core::protocol::BytesDialogProtocol;
-use panduza_platform_core::Error;
-use panduza_platform_core::Logger;
+use async_trait::async_trait;
 use std::sync::Arc;
 use strum_macros::FromRepr;
 use tokio::sync::Mutex;
+use panduza_platform_core::helper;
+use panduza_platform_core::Error;
+use panduza_platform_core::Logger;
+use panduza_platform_core::log_info;
+use panduza_platform_core::protocol::BytesDialogProtocol;
 
 use panduza_platform_core::model::BooleanAccessorModel;
-use panduza_platform_core::model::NumberAccessorModel;
 use panduza_platform_core::model::StringAccessorModel;
+use panduza_platform_core::model::NumberAccessorModel;
 use panduza_platform_core::model::VectorF32AccessorModel;
 
 // Base Interface
@@ -25,10 +25,10 @@ pub struct SpecializedInterface {
     ///
     ///
     base: Arc<Mutex<SerialEolInterface>>,
-
+    
     ///
     ///
-    logger: Logger,
+    logger: Logger
 }
 
 impl SpecializedInterface {
@@ -41,12 +41,18 @@ impl SpecializedInterface {
 
         //
         // Build the object
-        Self { base, logger }
+        Self {
+            base,
+            logger,
+        }
     }
 }
 
+
+
 #[derive(FromRepr, Debug, PartialEq)]
-pub enum BooleanAccessorIndex {}
+pub enum BooleanAccessorIndex {
+}
 
 #[async_trait]
 ///
@@ -59,15 +65,16 @@ impl BooleanAccessorModel for SpecializedInterface {
         // Get the index
         let idx = BooleanAccessorIndex::from_repr(index)
             .ok_or(Error::InvalidArgument("Invalid Index".to_string()))?;
-
+    
         //
         // Perform the request
         match idx {
-            _ => Err(Error::InvalidArgument("No Action for Index".to_string())),
-        }
-    }
+    _ => { Err(Error::InvalidArgument("No Action for Index".to_string())) }
+		}
 
-    ///
+}
+
+///
     ///
     async fn set_boolean_at(&mut self, index: usize, value: bool) -> Result<(), Error> {
         //
@@ -78,13 +85,15 @@ impl BooleanAccessorModel for SpecializedInterface {
         //
         // Perform the request
         match idx {
-            _ => Err(Error::InvalidArgument("No Action for Index".to_string())),
-        }
-    }
+		_ => { Err(Error::InvalidArgument("No Action for Index".to_string())) }
+}
+}
 }
 
+
 #[derive(FromRepr, Debug, PartialEq)]
-pub enum StringAccessorIndex {}
+pub enum StringAccessorIndex {
+}
 
 #[async_trait]
 ///
@@ -97,15 +106,15 @@ impl StringAccessorModel for SpecializedInterface {
         // Get the index
         let idx = StringAccessorIndex::from_repr(index)
             .ok_or(Error::InvalidArgument("Invalid Index".to_string()))?;
-
+    
         //
         // Perform the request
         match idx {
-            _ => Err(Error::InvalidArgument("No Action for Index".to_string())),
-        }
-    }
+    _ => { Err(Error::InvalidArgument("No Action for Index".to_string())) }
+}
+}
 
-    ///
+///
     ///
     async fn set_string_at(&mut self, index: usize, value: String) -> Result<(), Error> {
         //
@@ -116,15 +125,16 @@ impl StringAccessorModel for SpecializedInterface {
         //
         // Perform the request
         match idx {
-            _ => Err(Error::InvalidArgument("No Action for Index".to_string())),
-        }
-    }
+		_ => { Err(Error::InvalidArgument("No Action for Index".to_string())) }
 }
+}
+}
+
 
 #[derive(FromRepr, Debug, PartialEq)]
 pub enum NumberAccessorIndex {
-    DutyCycle,
-    Period,
+	DutyCycle,
+	Period,
 }
 
 #[async_trait]
@@ -138,31 +148,16 @@ impl NumberAccessorModel for SpecializedInterface {
         // Get the index
         let idx = NumberAccessorIndex::from_repr(index)
             .ok_or(Error::InvalidArgument("Invalid Index".to_string()))?;
-
+    
         //
         // Perform the request
         match idx {
-            NumberAccessorIndex::DutyCycle => Ok(helper::scpi::ScpiNumber::from_bytes(
-                self.base
-                    .lock()
-                    .await
-                    .ask(bytes::Bytes::from("PWM:DUTY?"))
-                    .await?,
-            )?
-            .value()),
-            NumberAccessorIndex::Period => Ok(helper::scpi::ScpiNumber::from_bytes(
-                self.base
-                    .lock()
-                    .await
-                    .ask(bytes::Bytes::from("PWM:PERIOD?"))
-                    .await?,
-            )?
-            .value()),
-            _ => Err(Error::InvalidArgument("No Action for Index".to_string())),
-        }
-    }
+    NumberAccessorIndex::DutyCycle => Ok(helper::scpi::ScpiNumber::from_bytes(self.base.lock().await.ask(bytes::Bytes::from("PWM:DUTY?")).await?)?.value()),NumberAccessorIndex::Period => Ok(helper::scpi::ScpiNumber::from_bytes(self.base.lock().await.ask(bytes::Bytes::from("PWM:PERIOD?")).await?)?.value()),_ => { Err(Error::InvalidArgument("No Action for Index".to_string())) }
+		}
 
-    ///
+}
+
+///
     ///
     async fn set_number_at(&mut self, index: usize, value: f32) -> Result<(), Error> {
         //
@@ -173,7 +168,9 @@ impl NumberAccessorModel for SpecializedInterface {
         //
         // Perform the request
         match idx {
-            _ => Err(Error::InvalidArgument("No Action for Index".to_string())),
-        }
-    }
+		_ => { Err(Error::InvalidArgument("No Action for Index".to_string())) }
 }
+}
+}
+
+    
