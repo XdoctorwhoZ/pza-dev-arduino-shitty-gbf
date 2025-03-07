@@ -25,8 +25,8 @@
                     codec: {
                         name: "scpi",
                         conf: {
-                            read_query: "PWM:DUTY?",
-                            write_query: "PWM:DUTY"
+                            get_query: "PWM:DUTY?",
+                            set_query: "PWM:DUTY"
                         }
                     }
                 },
@@ -38,8 +38,8 @@
                     codec: {
                         name: "scpi",
                         conf: {
-                            read_query: "PWM:PERIOD?",
-                            write_query: "PWM:PERIOD"
+                            get_query: "PWM:PERIOD?",
+                            set_query: "PWM:PERIOD"
                         }
                     }
                 }
