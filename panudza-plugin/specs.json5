@@ -15,7 +15,32 @@
 
             // },
             attributes: {
-                
+                "signal trigger": {
+                    info: "Duration of the signal in ms",
+                    type: "trigger",
+                    mode: "rw",
+                    model: "trigger-accessor",
+                    codec: {
+                        name: "scpi",
+                        conf: {
+                            get_query: "SIGnal:TRIG?",
+                            set_query: "SIGnal:TRIG"
+                        }
+                    }
+                },
+                "signal duration": {
+                    info: "Duration of the signal in ms",
+                    type: "number",
+                    mode: "rw",
+                    model: "number-accessor",
+                    codec: {
+                        name: "scpi",
+                        conf: {
+                            get_query: "SIGnal:DUR?",
+                            set_query: "SIGnal:DUR"
+                        }
+                    }
+                },
                 "duty cycle": {
                     info: "Duty cycle of the PWM",
                     type: "number",

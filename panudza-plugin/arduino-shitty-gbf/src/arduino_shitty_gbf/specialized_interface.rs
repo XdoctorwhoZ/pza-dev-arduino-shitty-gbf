@@ -10,6 +10,7 @@ use panduza_platform_core::Logger;
 use panduza_platform_core::log_info;
 use panduza_platform_core::protocol::BytesDialogProtocol;
 
+use panduza_platform_core::model::TriggerAccessorModel;
 use panduza_platform_core::model::BooleanAccessorModel;
 use panduza_platform_core::model::StringAccessorModel;
 use panduza_platform_core::model::NumberAccessorModel;
@@ -133,6 +134,7 @@ impl StringAccessorModel for SpecializedInterface {
 
 #[derive(FromRepr, Debug, PartialEq)]
 pub enum NumberAccessorIndex {
+	SignalDuration,
 	DutyCycle,
 	Period,
 }
@@ -152,7 +154,10 @@ impl NumberAccessorModel for SpecializedInterface {
         //
         // Perform the request
         match idx {
-    NumberAccessorIndex::DutyCycle => Ok(helper::scpi::ScpiNumber::from_bytes(self.base.lock().await.ask(bytes::Bytes::from("PWM:DUTY?")).await?)?.value()),NumberAccessorIndex::Period => Ok(helper::scpi::ScpiNumber::from_bytes(self.base.lock().await.ask(bytes::Bytes::from("PWM:PERIOD?")).await?)?.value()),_ => { Err(Error::InvalidArgument("No Action for Index".to_string())) }
+    NumberAccessorIndex::SignalDuration => Ok(helper::scpi::ScpiNumber::from_bytes(self.base.lock().await.ask(bytes::Bytes::from("SIGnal:DUR?")).await?)?.value()),
+NumberAccessorIndex::DutyCycle => Ok(helper::scpi::ScpiNumber::from_bytes(self.base.lock().await.ask(bytes::Bytes::from("PWM:DUTY?")).await?)?.value()),
+NumberAccessorIndex::Period => Ok(helper::scpi::ScpiNumber::from_bytes(self.base.lock().await.ask(bytes::Bytes::from("PWM:PERIOD?")).await?)?.value()),
+_ => { Err(Error::InvalidArgument("No Action for Index".to_string())) }
 		}
 
 }
@@ -168,6 +173,36 @@ impl NumberAccessorModel for SpecializedInterface {
         //
         // Perform the request
         match idx {
+		_ => { Err(Error::InvalidArgument("No Action for Index".to_string())) }
+}
+}
+}
+
+
+#[derive(FromRepr, Debug, PartialEq)]
+pub enum TriggerAccessorIndex {
+	SignalTrigger,
+}
+
+#[async_trait]
+///
+///
+impl TriggerAccessorModel for SpecializedInterface {
+    
+    
+
+    ///
+    ///
+    async fn trigger_at(&mut self, index: usize) -> Result<(), Error> {
+        //
+        // Get the index
+        let idx = TriggerAccessorIndex::from_repr(index)
+            .ok_or(Error::InvalidArgument("Invalid Index".to_string()))?;
+
+        //
+        // Perform the request
+        match idx {
+TriggerAccessorIndex::SignalTrigger => self.base.lock().await.tell(bytes::Bytes::from("SIGnal:TRIG?")).await,
 		_ => { Err(Error::InvalidArgument("No Action for Index".to_string())) }
 }
 }
