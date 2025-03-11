@@ -4,10 +4,10 @@ use panduza_platform_core::Actions;
 use panduza_platform_core::Producer;
 
 mod specialized_interface;
-pub use specialized_interface::BooleanAccessorIndex;
-pub use specialized_interface::NumberAccessorIndex;
 pub use specialized_interface::SpecializedInterface;
+pub use specialized_interface::BooleanAccessorIndex;
 pub use specialized_interface::StringAccessorIndex;
+pub use specialized_interface::NumberAccessorIndex;
 pub use specialized_interface::TriggerAccessorIndex;
 
 #[derive(Default)]
@@ -40,3 +40,4 @@ impl Producer for Package {
         return Ok(Box::new(device::Device::new()));
     }
 }
+    

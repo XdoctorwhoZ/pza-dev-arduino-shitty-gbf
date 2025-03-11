@@ -7,7 +7,12 @@
             interface: {
                 name: "serial-eol",
                 conf: {
-                    eol: "\n"
+                    eol: ["\r", "\n"],
+                    baudrate: 9600,
+                    usb: {
+                        vid: 0x2341,
+                        pid: 0x0043
+                    }
                 }
             },
 
@@ -23,21 +28,21 @@
                     codec: {
                         name: "scpi",
                         conf: {
-                            get_query: "SIGnal:TRIG?",
-                            set_query: "SIGnal:TRIG"
+                            trigger_query: "SIG:TRIG"
                         }
                     }
                 },
                 "signal duration": {
                     info: "Duration of the signal in ms",
                     type: "number",
+                    range: [0, 1000],
                     mode: "rw",
                     model: "number-accessor",
                     codec: {
                         name: "scpi",
                         conf: {
-                            get_query: "SIGnal:DUR?",
-                            set_query: "SIGnal:DUR"
+                            get_query: "SIG:DUR?",
+                            set_query: "SIG:DUR"
                         }
                     }
                 },
@@ -55,19 +60,6 @@
                         }
                     }
                 },
-                period: {
-                    info: "Period of the PWM in micro-seconds",
-                    type: "number",
-                    mode: "rw",
-                    model: "number-accessor",
-                    codec: {
-                        name: "scpi",
-                        conf: {
-                            get_query: "PWM:PERIOD?",
-                            set_query: "PWM:PERIOD"
-                        }
-                    }
-                }
             }
         }
 

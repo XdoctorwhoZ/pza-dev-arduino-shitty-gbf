@@ -4,6 +4,7 @@ use async_trait::async_trait;
 use std::sync::Arc;
 use strum_macros::FromRepr;
 use tokio::sync::Mutex;
+
 use panduza_platform_core::helper;
 use panduza_platform_core::Error;
 use panduza_platform_core::Logger;
@@ -136,7 +137,6 @@ impl StringAccessorModel for SpecializedInterface {
 pub enum NumberAccessorIndex {
 	SignalDuration,
 	DutyCycle,
-	Period,
 }
 
 #[async_trait]
@@ -154,9 +154,8 @@ impl NumberAccessorModel for SpecializedInterface {
         //
         // Perform the request
         match idx {
-    NumberAccessorIndex::SignalDuration => Ok(helper::scpi::ScpiNumber::from_bytes(self.base.lock().await.ask(bytes::Bytes::from("SIGnal:DUR?")).await?)?.value()),
+    NumberAccessorIndex::SignalDuration => Ok(helper::scpi::ScpiNumber::from_bytes(self.base.lock().await.ask(bytes::Bytes::from("SIG:DUR?")).await?)?.value()),
 NumberAccessorIndex::DutyCycle => Ok(helper::scpi::ScpiNumber::from_bytes(self.base.lock().await.ask(bytes::Bytes::from("PWM:DUTY?")).await?)?.value()),
-NumberAccessorIndex::Period => Ok(helper::scpi::ScpiNumber::from_bytes(self.base.lock().await.ask(bytes::Bytes::from("PWM:PERIOD?")).await?)?.value()),
 _ => { Err(Error::InvalidArgument("No Action for Index".to_string())) }
 		}
 
@@ -202,7 +201,7 @@ impl TriggerAccessorModel for SpecializedInterface {
         //
         // Perform the request
         match idx {
-TriggerAccessorIndex::SignalTrigger => self.base.lock().await.tell(bytes::Bytes::from("SIGnal:TRIG?")).await,
+TriggerAccessorIndex::SignalTrigger => self.base.lock().await.tell(bytes::Bytes::from("SIG:TRIG")).await,
 		_ => { Err(Error::InvalidArgument("No Action for Index".to_string())) }
 }
 }
